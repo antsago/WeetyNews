@@ -1,0 +1,15 @@
+body
+{
+
+}
+#news
+{
+		position: absolute;
+		margin-left:30%;
+		margin-right:30%;
+		width:40%;
+		background-color:#b0e0e6;
+		text-align:center;
+		color:blue;
+}
+
