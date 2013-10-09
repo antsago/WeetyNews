@@ -6,43 +6,58 @@
         <link rel="stylesheet" href="WeetyNews.css" />
         <title>Weety News</title>
         <script>
-			function showNews(keyword) {
-				moveLeft();
-				makeFrame(keyword);
-			}
-
-			function moveLeft() {
-				newsblock = document.getElementById("news");
-				newsblock.style.marginLeft = "0.5%"; 
-				newsblock.style.width = "29.5%";
-				newsblock.style.marginRight = "70%";
-				//newsblock.style.left = '50px';
-			}
-
-			function makeFrame(keyword) {
-				ifrm = document.createElement("IFRAME");
-				ifrm.setAttribute("src", "https://www.google.com/");//search?tbm=nwsq=" + keyword);
-				ifrm.style.width = "40%";
-				ifrm.style.height = "100%";
-				ifrm.style.marginLeft = "40%";
-				ifrm.style.marginRight = "auto";
-				document.body.appendChild(ifrm);
-			}
+			// function showNews(keyword) {
+				// moveLeft();
+				// makeFrame(keyword);
+			// }
+// 
+			// function moveLeft() {
+				// newsblock = document.getElementById("news");
+				// newsblock.style.marginLeft = "0.5%"; 
+				// newsblock.style.width = "29.5%";
+				// newsblock.style.marginRight = "70%";
+				// //newsblock.style.left = '50px';
+			// }
+// 
+			// function makeFrame(keyword) {
+				// ifrm = document.createElement("IFRAME");
+				// ifrm.setAttribute("src", "http://www.google.com/");//search?tbm=nwsq=" + keyword);
+				// ifrm.style.width = "40%";
+				// ifrm.style.height = "100%";
+				// ifrm.style.marginLeft = "40%";
+				// ifrm.style.marginRight = "auto";
+				// document.body.appendChild(ifrm);
+			// }
         </script>
     </head>
     <body>
         <h1>Today's news:</h1>
         <div id="news">
-        	<p onclick="showNews('al')">al</p>
-        	<p>libya</p>
-        	<p>shutdown</p>
-        	<p>killed</p>
-        	<p>somalia</p>
-        	<p>shabaab</p>
-        	<p>attack</p>
-        	<p>forces</p>
-        	<p>military</p>
-        	<p>raid</p>
-        </div>
+        	<a>al</a>
+        	<a href="#">libya</a>
+        	<a href="#">shutdown</a>
+        	<a href="#">killed</a>
+        	<a href="#">somalia</a>
+        	<a href="#">shabaab</a>
+        	<a href="#">attack</a>
+        	<a href="#">forces</a>
+        	<a href="#">military</a>
+        	<a href="#">raid</a>
+         </div>
+	 <div>
+	  <iframe></iframe>
+	</div>
+        <script src="Libraries/Jquery.js"></script>
+        <script>
+        	$(document).ready(function(){
+		  $("#news a").on("click", function(){
+		    $("#news").animate({width: "300px"}, function(){
+		      $("#news").animate({marginLeft: "0px"}, function(){
+			  $("iframe").attr("http://www.google.com");
+			});
+		      });
+		    });	
+        	});
+        </script>
     </body>
 </html>
