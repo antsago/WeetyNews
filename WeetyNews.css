@@ -2,11 +2,11 @@ body
 {
 
 }
+
 #news
 {
-		position: absolute;
 		margin-left:30%;
-		margin-right:30%;
+		float: left;
 		width:40%;
 		background-color:#b0e0e6;
 		text-align:center;
@@ -16,5 +16,15 @@ body
 #news a{
   display: block;
 
+}
+
+#news, .results-window{
+	display: inline-block;
+}
+
+.results-window{
+	width: 300px;
+	height: 500px;
+	border: 1px solid brown;
 }
 

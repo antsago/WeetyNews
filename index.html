@@ -43,10 +43,10 @@
         	<a href="#">forces</a>
         	<a href="#">military</a>
         	<a href="#">raid</a>
-         </div>
-	 <div>
-	  <iframe></iframe>
-	</div>
+        </div>
+	 	<div class="results-window">
+		  <iframe src="http://www.google.com"></iframe>
+		</div>
         <script src="Libraries/Jquery.js"></script>
         <script>
         	$(document).ready(function(){
@@ -54,6 +54,8 @@
 		    $("#news").animate({width: "300px"}, function(){
 		      $("#news").animate({marginLeft: "0px"}, function(){
 			  $("iframe").attr("http://www.google.com");
+
+			  $(".results-window").animate({width: "600px"});
 			});
 		      });
 		    });	
