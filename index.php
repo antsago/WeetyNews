@@ -19,7 +19,7 @@
 		    );
 	      $db = new PDO('mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['dbname'], $config['db']['username'], $config['db']['password']);
 
-	      $query = $db->query("SELECT Text FROM `Topics`");
+	      $query = $db->query("SELECT Text FROM `Topics` ORDER BY `Topics`.`Rank` ASC");
 
 	      $topics = $query->fetchAll(PDO::FETCH_ASSOC);
 
