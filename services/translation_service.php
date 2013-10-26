@@ -26,9 +26,9 @@ class TranslationService
     //
 
     //Client ID of the application.
-    $clientID       = 
-    //Client Secret key of the application.
-    $clientSecret = 
+    $clientID = ;
+    //CLient secret
+    $clientSecret = ;
     //OAuth Url.
     $authUrl      = "https://datamarket.accesscontrol.windows.net/v2/OAuth2-13/";
     //Application Scope Url
@@ -59,6 +59,8 @@ class TranslationService
 
     //Call the curlRequest
     $strResponse = $this->translatorObj->curlRequest($translateMethodUrl, $this->authHeader);
+    $strResponse = str_replace('<string xmlns="http://schemas.microsoft.com/2003/10/Serialization/">', '', $strResponse);
+    $strResponse = str_replace('</string>', '', $strResponse);
     return $strResponse;
   }
 

@@ -134,6 +134,9 @@ class TweetService
 		//Remove topics
 		$tweet_text = str_replace('#', '', $tweet_text);
 
+		// Remove 'RT'
+		$tweet_text = str_replace('RT ', '', $tweet_text);
+
 		return $tweet_text;
 	}
 
