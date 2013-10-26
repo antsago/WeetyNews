@@ -200,12 +200,23 @@ class TweetService
 	      //Save in database
 	      $translated_tweets[] = TweetText::create(array(
 						  'text' => $translatedText,
-						  'tweet_id' => $original_tweet->id,
+						  'tweet_id' => $original_tweet->tweet_id,
 						  'language_id' => $target_lang_id
 				     ));
 	    }
 	  }
 
 	  return $translated_tweets;
+	}
+
+
+	public function agregate($tweets)
+	{
+	  $agregatedTweet = "";
+	  foreach($tweets as $tweet)
+	  {
+	    $agregatedTweet .= $tweet->text . "\n";
+	  }
+	  return $agregatedTweet;
 	}
 }
