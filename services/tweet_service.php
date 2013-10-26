@@ -1,7 +1,8 @@
 <?php
 
-require(__DIR__."/../models/Tweet.php");
-require_once(__DIR__.'/../TwitterAPIExchange.php');
+// require(__DIR__."/../models/Tweet.php");
+require_once(__DIR__."/../models/Model.php");
+require_once(__DIR__.'/../Libraries/TwitterAPIExchange.php');
 
 
 /**
@@ -11,6 +12,10 @@ class TweetService
 {
 	public function __construct(){
 
+		
+	}
+
+	public function get_tweets_list_for_newspaper($newspaper_twitter_url){
 		/** Set access tokens here - see: https://dev.twitter.com/apps/ **/
 		$settings = array(
 		    'oauth_access_token' => "1941543840-wE4H2wiNYCkhntlz1S3VCpUp7LgarDO5pVTvUvY",
@@ -20,7 +25,10 @@ class TweetService
 		);
 
 		$url = 'https://api.twitter.com/1.1/statuses/user_timeline.json';
-		$getfield = '?screen_name=LSWebApps';
+
+		$exploded = explode('https://twitter.com/', $newspaper_twitter_url);
+		$getfield = '?screen_name='.end($exploded);
+
 		$requestMethod = 'GET';
 		$twitter = new TwitterAPIExchange($settings);
 		$json_results_of_tweets = $twitter->setGetfield($getfield)
@@ -28,11 +36,138 @@ class TweetService
 		             ->performRequest();
 
 		$tweets_array = json_decode($json_results_of_tweets);
-		$this->tweets_array = $tweets_array;
+
+		return $tweets_array;
 	}
 
 
-	public function add_raw_tweet_details($twitter_url){
-		print_r($this->tweets_array);
+	public function store_tweets_for_newspaper($newspaper, $tweets_from_twitter){
+
+		$stored_newspaper_tweets = array();
+
+		foreach($tweets_from_twitter as $single_tweet){
+
+			$tweeted_at = $single_tweet->created_at;
+			$news_paper_id = $newspaper->id;
+			
+			$new_tweet = Tweet::create(array(
+						'tweeted_at' => date('Y-m-d H:i:s', strtotime(str_replace('-', '/', $tweeted_at))),
+						'newspaper_id' => $news_paper_id
+					));
+			
+
+			$tweet_text = $this->extract_tweet_text_from_tweet_object($single_tweet);
+
+			$stored_newspaper_tweets[] = TweetText::create(array(
+						'text' => $tweet_text,
+						'tweet_id' => $new_tweet->id,
+						'language_id' => $newspaper->language_id
+				        ));
+		}
+
+		return $stored_newspaper_tweets;
+
+		// $tweets_array = $this->get_tweets_for_newspaper($news_paper->twitter_url);
+		// $time = time();
+		// $list_of_files = array();
+
+		// // Contains a concatenated texts for all tweets 
+		// // for a single newspaper
+		// $tweet_texts_combined = "";
+
+		// foreach($tweets_array as $tweet){
+
+		// 	$tweet_text = $tweet->text;
+		// 	$urls_array = $tweet->entities->urls;
+		// 	$mentions_array = $tweet->entities->user_mentions;
+
+		// 	// print_r($urls_array);
+		// 	if(is_array($urls_array)){
+		// 		foreach ($urls_array as $url) {
+		// 			$tweet_text = str_replace(trim($url->url), '', $tweet_text);
+		// 		}
+
+		// 		// print_r($url->url);
+		// 	}
+
+		// 	foreach ($mentions_array as $mention) {
+		// 		$tweet_text = str_replace('@'.$mention->screen_name, '', $tweet_text);
+		// 	}
+
+		// 	$tweet_text = str_replace('#', '', $tweet_text);
+
+		// 	$tweet_texts_combined .= $tweet_text;
+
+		// 	echo $tweet_text.'<br><br>';
+		// }
+
+		// $filename = 'tweetfile'.$time;
+		// $this->make_tweet_file($filename, $tweet_text);
+		// $list_of_files[] = $filename;
+
+		// implode(' ', $list_of_files);
+
+		// print_r($tweets_array);
+	}
+
+	private function extract_tweet_text_from_tweet_object($tweet){
+		$tweet_text = $tweet->text;
+		$urls_array = $tweet->entities->urls;
+		$mentions_array = $tweet->entities->user_mentions;
+
+		//TODO: are we sure we want to do all this?
+		
+		//Remove URLs
+		if(is_array($urls_array)){
+			foreach ($urls_array as $url) {
+				$tweet_text = str_replace(trim($url->url), '', $tweet_text);
+			}
+
+		}
+
+		//Remove mentions
+		foreach ($mentions_array as $mention) {
+			$tweet_text = str_replace('@'.$mention->screen_name, '', $tweet_text);
+		}
+
+		//Remove topics
+		$tweet_text = str_replace('#', '', $tweet_text);
+
+		return $tweet_text;
+	}
+
+	private function make_tweet_file($filename, $file_contents){
+
+		file_put_contents ('tweet_files/'.$filename , $file_contents);
+	}
+
+	public function calculate_word_weights(){
+		$filename = 'tweet_files/listtweets.weights';
+
+		$lines_array = file($filename);
+		$ranks = array();
+
+		// print_r($lines_array);
+
+		foreach ($lines_array as $line) {
+			$split_items = explode(':  ', $line);
+			$word = $split_items[0];
+
+			$ranks[$word] = 0;
+
+			$values = $split_items[1];
+			$values = explode(' ', $values);
+
+			foreach ($values as $value) {
+				$value = explode(':', $value);
+				$value = $value[1];
+
+				$ranks[$word] += $value;
+			}
+		}
+
+		arsort($ranks);
+
+		print_r($ranks);
 	}
 }
