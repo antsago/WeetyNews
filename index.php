@@ -15,7 +15,7 @@
 		    'host'	  => 'localhost',
 		    'username'	  => 'root',
 		    'password'	  => '',
-		    'dbname'	  => 'Topics' 
+		    'dbname'	  => 'WeetyNews' 
 		    );
 	      $db = new PDO('mysql:host=' . $config['db']['host'] . ';dbname=' . $config['db']['dbname'], $config['db']['username'], $config['db']['password']);
 
