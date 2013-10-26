@@ -16,10 +16,19 @@ class TranslationService
 
   public function __construct()
   {
+    //We are hiding the access keys from the git repo, if you need them
+    //contact a contributor. If you need to change this file do:
+    //   git update-index --no-assume-unchanged translation_service.php
+    // delete the clientID and the clientSecret
+    // commit the changes
+    //   git update-index --assume-unchanged translation_service.php
+    // and now you can safely add back the keys and use git commit -a
+    //
+
     //Client ID of the application.
-    $clientID       =
+    $clientID       = 
     //Client Secret key of the application.
-    $clientSecret =
+    $clientSecret = 
     //OAuth Url.
     $authUrl      = "https://datamarket.accesscontrol.windows.net/v2/OAuth2-13/";
     //Application Scope Url

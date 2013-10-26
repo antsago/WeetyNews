@@ -1,0 +1,9 @@
+The libraries below are distributed as a git repository and has been added as a "fake submodule"
+described in:
+http://debuggable.com/posts/git-fake-submodules:4b563ee4-f3cc-4061-967e-0e48cbdd56cb
+
+If you want to update them do an "rm -rf my-subproject" and clone the project again. Then you
+just will be able to git pull to update it.
+
+Fake submodule libraries:
+  AlchemyAPI
