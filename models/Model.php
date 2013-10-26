@@ -1,6 +1,6 @@
 <?php
 
-require(__DIR__."/../libs/php-activerecord/ActiveRecord.php");  
+require(__DIR__."/../Libraries/php-activerecord/ActiveRecord.php");  
 
 ActiveRecord\Config::initialize(function($cfg)
 {
