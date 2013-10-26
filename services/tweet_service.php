@@ -1,18 +1,18 @@
 <?php
 
-// require(__DIR__."/../models/Tweet.php");
 require_once(__DIR__."/../models/Model.php");
 require_once(__DIR__.'/../Libraries/TwitterAPIExchange.php');
-
+require_once(__DIR__."/translation_service.php");
 
 /**
 * 
 */
 class TweetService
 {
-	public function __construct(){
 
-		
+	public $translationService;
+	public function __construct(){
+  	        $this->translationService = new TranslationService();
 	}
 
 	public function get_tweets_list_for_newspaper($newspaper_twitter_url){
@@ -66,7 +66,9 @@ class TweetService
 		}
 
 		return $stored_newspaper_tweets;
+	}
 
+	// TODO: I guess we can dich all the comments below???
 		// $tweets_array = $this->get_tweets_for_newspaper($news_paper->twitter_url);
 		// $time = time();
 		// $list_of_files = array();
@@ -108,7 +110,6 @@ class TweetService
 		// implode(' ', $list_of_files);
 
 		// print_r($tweets_array);
-	}
 
 	private function extract_tweet_text_from_tweet_object($tweet){
 		$tweet_text = $tweet->text;
@@ -169,5 +170,42 @@ class TweetService
 		arsort($ranks);
 
 		print_r($ranks);
+	}
+	
+
+	public function tranlate_tweets($original_tweets)
+	{
+	  $translated_tweets = array();
+
+	  
+	  foreach ($original_tweets as $original_tweet)
+	  {
+	    $original_text = $original_tweet->text;
+	    $original_language_id = $original_tweet->language_id;
+	    $original_lang = Language::find_by_id($original_language_id)->code;
+	    $target_lang = "en";
+	    $target_lang_id = 1;
+
+	    //Check if tweet is already in english:
+	    if($original_lang == $target_lang)
+	    {
+	      //So that we don't lose things
+	      $translated_tweets[] = $original_tweet;
+	    }
+	    else
+	    {
+	      //Translate
+	      $translatedText = $this->translationService->translate($original_text, $original_lang, $target_lang);
+
+	      //Save in database
+	      $translated_tweets[] = TweetText::create(array(
+						  'text' => $translatedText,
+						  'tweet_id' => $original_tweet->id,
+						  'language_id' => $target_lang_id
+				     ));
+	    }
+	  }
+
+	  return $translated_tweets;
 	}
 }
