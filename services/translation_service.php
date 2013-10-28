@@ -2,6 +2,7 @@
 
 require_once(__DIR__."/../Libraries/AccessTokenAuthentication.php");
 require_once(__DIR__."/../Libraries/HTTPTranslator.php");
+require_once(__DIR__."/../models/Model.php");
 
 
 /**
@@ -26,9 +27,8 @@ class TranslationService
     //
 
     //Client ID of the application.
-    $clientID = ;
-    //CLient secret
-    $clientSecret = ;
+    $clientID = "5821f06b-a4e3-44da-8da4-c4e4a1185cc9";
+    $clientSecret = "Z9qAi7eozbOpampYFJgmJXO7DjHl/VFMkulqHyRaouU=";
     //OAuth Url.
     $authUrl      = "https://datamarket.accesscontrol.windows.net/v2/OAuth2-13/";
     //Application Scope Url
@@ -72,6 +72,17 @@ class TranslationService
     //Call the curlRequest.
     $listOfLanguages = $this->translatorObj->curlRequest($requestUrl, $this->authHeader);
     return $listOfLanguages;
+  }
+
+  // retrieves the langues that we have from 
+  // a database and returns it as a list
+  // of objects with keys
+  // name:
+  // code:
+  // english_name:
+  public function get_languages_list_from_db(){
+    // $languages_list
+    return Language::find('all');
   }
 }
 ?>

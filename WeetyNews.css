@@ -3,6 +3,22 @@ body
 
 }
 
+header{
+	background-color: lightgrey;
+	text-align: center;
+	padding: 5px 10px;
+}
+
+header 	h1{
+	display: inline-block;
+	float: none;
+}
+
+.language-selector{
+	display: inline-block;
+	float: right;
+}
+
 #news
 {
 		margin-left:30%;
@@ -11,11 +27,21 @@ body
 		background-color:#b0e0e6;
 		text-align:center;
 		color:blue;
+		padding: 20px;
+		border: 3px solid darkblue;
+		margin-top: 30px;
 }
 
 #news a{
   display: block;
+  margin-bottom: 10px;
+  color: green;
 
+}
+
+#news a.active{
+	background-color: darkblue;
+	color: white;
 }
 
 #news, .results-window{
@@ -26,5 +52,6 @@ body
 	width: 500px;
 	height: 1000px;
 	border: none;
+	margin-left: 40px;
 }
 

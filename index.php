@@ -1,13 +1,30 @@
+<?php 
+	require_once('services/translation_service.php');
+
+	$translation_service = new TranslationService();
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="WeetyNews.css" />
         <title>Weety News</title>
     </head>
     <body>
-        <h1>Today's news:</h1>
+    	<header>
+        	<h1>Today's news</h1>   
+        	<div class="language-selector">
+        		<select>
+        			<?php $languages_list = $translation_service->get_languages_list_from_db(); ?>
+        			<?php foreach($languages_list as $language): ?>
+        			<option value="<?php echo $language->code; ?>"><?php echo $language->name; ?></option>
+        			<?php endforeach; ?>
+        		</select>
+        	</div> 		
+    	</header>
+
 	<!-- insert topics from database-->
         <div id="news">
 	  <?php
@@ -38,34 +55,35 @@
 		echo '<a href="#">' . $topic['Text'] . '</a>';
 	      }
 
-	      require 'post_request.php';
-	      $langCodes = Translator::getAvailableLanguages();
+	      // require 'post_request.php';
+	      // $langCodes = Translator::getAvailableLanguages();
 
-	      echo $langCodes;
-	      foreach($langCodes as $langCode)
-	      {
-		echo $langCode . Translator::getLanguageName($langCode, $langCode) . "<br>";
-	      }
+	      // echo $langCodes;
+	  //     foreach($langCodes as $langCode)
+	  //     {
+			// echo $langCode . Translator::getLanguageName($langCode, $langCode) . "<br>";
+	  //     }
 	      ?>
         </div>
 	<div class="results-window" id="results"></div>
 
         <script src="Libraries/Jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
         <script>
-        	$(document).ready(function(){
-		    $(".results-window").hide();
-		    $("#news a").on("click", function(){
-		        $(this).expandAndMove('asdf');
-			$(this).searchTopic($(this).text());
-
-		    });
-		});
+	    	$(document).ready(function(){
+			    $(".results-window").hide();
+			    $("#news a").on("click", function(){
+			        $(this).expandAndMove('asdf');
+					$(this).searchTopic($(this).text());
+					$(this).addClass("active").siblings("a").removeClass("active");
+			    });
+			});
 
 		$.fn.expandAndMove = function(str){
 		    $("#news").animate({width: "300px"}, function(){
-			$("#news").animate({marginLeft: "0px"}, function(){
-			  $(this).showNews();
-			});
+				$("#news").animate({marginLeft: "0px"}, function(){
+				  $(this).showNews();
+				});
 		    });
 		}//expandAndMove
 
@@ -76,7 +94,7 @@
 
 		$.fn.searchTopic = function(topic){
 		  $.get('fetchResults.php?topic="' + topic + '"', function(news){
-		    $("#results").html(news);
+		    $("#results").html(news).find(".r a").attr("target", "_blank");
 		  });
 		  $(this).changeLang("es");
 		}
